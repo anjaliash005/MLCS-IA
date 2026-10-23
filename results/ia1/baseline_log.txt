@@ -1,0 +1,24 @@
+=== IA-1 baseline: membership inference on Pima (seed 0) ===
+raw file sha256 : 6bfe5d0f379d17a0e0819b996407e3c09bf80febd4287f2ed212190dfff154af
+records         : 768  (Outcome 0/1 = 500/268)
+zero -> missing : Glucose=5, BloodPressure=35, SkinThickness=227, Insulin=374, BMI=11
+features        : 10 (8 scaled to [-1,1] with public bounds + 2 missing indicators)
+public bounds   : Pregnancies 0-17; Glucose 40-200; BloodPressure 20-125; SkinThickness 5-100; Insulin 10-850; BMI 15-68; DiabetesPedigreeFunction 0.05-2.5; Age 21-81
+split           : target members 192, non-members 192, shadow pool 384
+positive rate   : members 0.349, non-members 0.349, pool 0.349
+attack          : 8 shadow models (same recipe as target) -> LR attack classifier
+
+[A: LogReg (L2)]    0.1s
+   utility : train acc 0.766 | test acc 0.760 | test F1 0.589 | test AUC 0.842 | gap 0.005
+   attack  : AUC 0.518 | acc 0.484 | prec 0.487 | rec 0.583 | F1 0.531 | adv -0.031
+[B: MLP-32]    1.5s
+   utility : train acc 0.766 | test acc 0.771 | test F1 0.627 | test AUC 0.822 | gap -0.005
+   attack  : AUC 0.525 | acc 0.513 | prec 0.510 | rec 0.667 | F1 0.578 | adv 0.026
+[C: MLP-128x2 (baseline)]    5.7s
+   utility : train acc 1.000 | test acc 0.719 | test F1 0.585 | test AUC 0.795 | gap 0.281
+   attack  : AUC 0.738 | acc 0.669 | prec 0.607 | rec 0.958 | F1 0.743 | adv 0.339
+[D: MLP-128x2 + L2 + early stop]    0.5s
+   utility : train acc 0.661 | test acc 0.656 | test F1 0.029 | test AUC 0.726 | gap 0.005
+   attack  : AUC 0.506 | acc 0.487 | prec 0.478 | rec 0.281 | F1 0.354 | adv -0.026
+
+saved results/ia1/baseline_seed0.csv

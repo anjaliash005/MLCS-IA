@@ -1,0 +1,58 @@
+{
+  "generated_utc": "2026-10-23T18:26:36+00:00",
+  "environment": {
+    "python": "3.9.6",
+    "sklearn": "1.6.1",
+    "numpy": "2.0.2",
+    "platform": "macOS-26.6.2-arm64-arm-64bit"
+  },
+  "pima": {
+    "file": "raw/pima-indians-diabetes.data.csv",
+    "sha256": "6bfe5d0f379d17a0e0819b996407e3c09bf80febd4287f2ed212190dfff154af",
+    "rows_original": 768,
+    "columns_original": 9,
+    "class_counts": {
+      "0": 500,
+      "1": 268
+    },
+    "missing_after_zero_to_nan": {
+      "Pregnancies": 0,
+      "Glucose": 5,
+      "BloodPressure": 35,
+      "SkinThickness": 227,
+      "Insulin": 374,
+      "BMI": 11,
+      "DiabetesPedigreeFunction": 0,
+      "Age": 0,
+      "Outcome": 0
+    },
+    "final_shape_scaled": [
+      768,
+      10
+    ]
+  },
+  "breast_cancer": {
+    "file": "/Users/ash/mlcs ia/.venv/lib/python3.9/site-packages/sklearn/datasets/data/breast_cancer.csv",
+    "sha256": "fed3eb72d0575ef6192293f5093c6e801b1476b577d0386bf4455504522172ed",
+    "rows": 569,
+    "features": 30,
+    "class_counts": {
+      "malignant": 212,
+      "benign": 357
+    }
+  },
+  "processed_files": {
+    "pima_scaled": {
+      "path": "processed/pima_scaled.csv",
+      "sha256": "149e01c3b78bf2f67f4b2a7fd6d18b5c9b5e0196ceb48225a8ec7bc96e152a35"
+    },
+    "pima_discretised": {
+      "path": "processed/pima_discretised.csv",
+      "sha256": "4120d94497d3bac3a09526be74e71b6e8a91de21bef8c6e527e0525cce75dc25"
+    },
+    "breast_cancer_scaled": {
+      "path": "processed/breast_cancer_scaled.csv",
+      "sha256": "07471ced7eb5817d1c23f8beaf0d2d2f83f1e57021c90d64b3f89121dc11253d"
+    }
+  }
+}

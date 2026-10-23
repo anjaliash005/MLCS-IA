@@ -3,7 +3,6 @@ from the result tables and figures. Run after make_figures.py."""
 from __future__ import annotations
 
 import os
-from datetime import date
 
 import numpy as np
 from reportlab.lib.pagesizes import A4
@@ -14,7 +13,7 @@ from reportlab.platypus import (KeepTogether, PageBreak, Paragraph, SimpleDocTem
 from common import ROOT
 from m2_dp import mia_advantage_bound, DELTA
 from models import BASELINE
-from pdfkit import P, bullets, f3, figure, pfmt, styles, table
+from pdfkit import P, bullets, f3, figure, pfmt, strip_dates, styles, table
 from results_access import FIGS, Results
 
 AUTHOR = "Anjali Ashtankar"
@@ -108,8 +107,7 @@ def title_page():
                     ["Assessment", "IA-2 (20 marks) - continuation of IA-1 research foundation"],
                     ["IA-1 topic", "Membership Inference Attack on ML Models: A Healthcare Privacy Use Case"],
                     ["Datasets", "Pima Indians Diabetes (primary); Breast Cancer Wisconsin Diagnostic (replication)"],
-                    ["Code & data", "Project folder `mlcs ia/` (src/, data/, results/) - see Appendix A"],
-                    ["Date", date.today().strftime("%d %B %Y")]],
+                    ["Code & data", '<link href="https://github.com/anjaliash005/MLCS-IA" color="#1c5cab">https://github.com/anjaliash005/MLCS-IA</link>' + " (src/, data/, results/) - see Appendix A"]],
                    [4.2 * cm, W - 4.2 * cm], st, font_size=9))
     s.append(Spacer(1, 1.2 * cm))
     s.append(P("*All results in this report were produced by the code in `src/` and are read "
@@ -403,6 +401,7 @@ def stage3():
                "for the utility label. DUCA uses (S_B^u + ρ'I)w = λ(γS_B^p + S_W^u + ρI)w, which penalises "
                "directions that separate the privacy attribute (γ = 5, ρ = 10<super>-2</super>, ρ' = 10<super>-3</super>)."))
     s.append(H2("3.4 Execution instructions"))
+    s.append(P("`git clone https://github.com/anjaliash005/MLCS-IA.git && cd MLCS-IA`", st["code"]))
     s.append(P("`python3 -m venv .venv && .venv/bin/pip install -r requirements.lock.txt`", st["code"]))
     s.append(P("`.venv/bin/python src/run_experiments.py        # add --quick for a 2-seed smoke test`", st["code"]))
     s.append(P("`.venv/bin/python src/make_figures.py && .venv/bin/python src/build_report.py`", st["code"]))
@@ -795,6 +794,7 @@ def appendix():
     env = prov["environment"]
     s = [PageBreak(), H1("Appendix A - Reproducibility")]
     s.append(table([["Item", "Value"],
+        ["Repository", '<link href="https://github.com/anjaliash005/MLCS-IA" color="#1c5cab">https://github.com/anjaliash005/MLCS-IA</link>'],
         ["Python / platform", f"{env['python']} / {env['platform']}"],
         ["Key libraries", f"numpy {env['numpy']}, scikit-learn {env['sklearn']}, scipy 1.13.1, pandas 2.3.3, "
                           "matplotlib 3.9.4, reportlab 4.2.5 (pinned in requirements.lock.txt)"],
@@ -833,6 +833,7 @@ def main():
                             subject="IA-2 Security and Privacy for Machine Learning")
     story = title_page() + abstract() + stage1() + stage2() + stage3() + stage4() + stage5() + references() + appendix()
     doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
+    strip_dates(OUT)
     print("wrote", OUT)
 
 

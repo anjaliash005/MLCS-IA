@@ -112,4 +112,16 @@ def pfmt(p):
     return "<0.001" if p < 0.001 else f"{p:.3f}"
 
 
-__all__ = ["styles", "P", "bullets", "table", "figure", "f3", "pfmt", "md", "cm", "Spacer"]
+def strip_dates(path):
+    """Remove creation/modification timestamps from a finished PDF's metadata."""
+    from pypdf import PdfReader, PdfWriter
+    reader = PdfReader(path)
+    writer = PdfWriter(clone_from=reader)
+    meta = {k: v for k, v in (reader.metadata or {}).items() if k not in ("/CreationDate", "/ModDate")}
+    writer._info = None
+    writer.add_metadata(meta)
+    with open(path, "wb") as f:
+        writer.write(f)
+
+
+__all__ = ["styles", "P", "bullets", "table", "figure", "f3", "pfmt", "md", "cm", "Spacer", "strip_dates"]

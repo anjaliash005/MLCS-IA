@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import json
 import os
-from datetime import date
 
 import matplotlib
 matplotlib.use("Agg")
@@ -23,7 +22,7 @@ from sklearn.metrics import roc_curve
 from common import PIMA_BOUNDS, RESULTS, ROOT, load_pima
 from m2_dp import mia_advantage_bound, sigma_for
 from make_figures import GRID, INK, INK2, MUTED, S
-from pdfkit import P, bullets, f3, figure, styles, table
+from pdfkit import P, bullets, f3, figure, strip_dates, styles, table
 
 AUTHOR, ROLL, BATCH = "Anjali Ashtankar", "16014223012", "B1"
 TITLE = "Membership Inference Attack on Machine Learning Models: A Healthcare Privacy Use Case"
@@ -162,8 +161,9 @@ def title_page():
     s.append(table([["Field", "Details"], ["Student", AUTHOR], ["Roll number", ROLL], ["Batch", BATCH],
                     ["Assessment", "IA-1 (20 marks) - individual research-based assessment"],
                     ["Dataset", "Pima Indians Diabetes (public benchmark)"],
-                    ["Code", "`src/run_ia1_baseline.py` and modules in `src/` (see Section 4)"],
-                    ["Date", date.today().strftime("%d %B %Y")]], [4.2 * cm, W - 4.2 * cm], st, font_size=9))
+                    ["Code & data", '<link href="https://github.com/anjaliash005/MLCS-IA" color="#1c5cab">https://github.com/anjaliash005/MLCS-IA</link>'],
+                    ["Entry point", "`src/run_ia1_baseline.py` and modules in `src/` (see Section 4)"]],
+                   [4.2 * cm, W - 4.2 * cm], st, font_size=9))
     s.append(Spacer(1, 1.2 * cm))
     s.append(P("*Builds on the Module 1 research-foundation document. All numbers are produced by the code "
                "in `src/`; experiments use only public data and locally trained models.*", st["cap"]))
@@ -419,6 +419,7 @@ def stage4():
     s.append(fig("ia1_fig3_mechanisms.png", "Figure 3. Mechanism-level checks: DP accounting, LDP mechanism variance "
                  "(dashed = theory), k-anonymity trade-off, and utility of PCA/DCA projections (seed 0)."))
     s.append(H2("4.4 Execution instructions"))
+    s.append(P("`git clone https://github.com/anjaliash005/MLCS-IA.git && cd MLCS-IA`", st["code"]))
     s.append(P("`python3 -m venv .venv && .venv/bin/pip install -r requirements.lock.txt`", st["code"]))
     s.append(P("`.venv/bin/python src/run_ia1_baseline.py`", st["code"]))
     s.append(H3("Output log"))
@@ -516,6 +517,7 @@ def main():
                             subject="IA-1 Security and Privacy for Machine Learning")
     doc.build(title_page() + abstract() + stage1() + stage2() + stage3() + stage4() + stage5(),
               onFirstPage=on_page, onLaterPages=on_page)
+    strip_dates(OUT)
     print("wrote", OUT)
 
 

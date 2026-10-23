@@ -13,7 +13,7 @@ from reportlab.platypus import (BaseDocTemplate, Frame, FrameBreak, KeepTogether
 
 import build_report as br
 from common import ROOT
-from pdfkit import P, f3, figure, pfmt, styles, table
+from pdfkit import P, f3, figure, pfmt, strip_dates, styles, table
 
 R = br.R
 OUT = os.path.join(ROOT, "reports", f"IA2_Manuscript_Draft_{br.AUTHOR.replace(' ', '_')}_{br.ROLL}.pdf")
@@ -36,7 +36,8 @@ def header():
     a = ParagraphStyle("a", fontName="Times-Roman", fontSize=10.5, leading=13, alignment=TA_CENTER)
     return [Paragraph(br.TITLE, t),
             Paragraph(f"{br.AUTHOR}<br/><i>Roll No. {br.ROLL}, Batch {br.BATCH} - Security and Privacy for Machine "
-                      "Learning (IA-2 manuscript draft)</i>", a), Spacer(1, 10)]
+                      "Learning (IA-2 manuscript draft)</i><br/><font size=9>Code and data: <link href='https://github.com/anjaliash005/MLCS-IA' color='#1c5cab'>https://github.com/anjaliash005/MLCS-IA</link></font>", a),
+            Spacer(1, 10)]
 
 
 def body():
@@ -102,7 +103,7 @@ def body():
                f"privacy label, Age >= 35, to the denominator). An unsupervised DP k-means demonstration [9] is reported in "
                f"the companion technical report."))
     s.append(B("*Data.* Pima Indians Diabetes (768 records, 268 positive) [22] and Breast Cancer Wisconsin Diagnostic "
-               "(569 records) [23]. Everything is implemented in NumPy, with scikit-learn [24] used for the non-private "
+               "(569 records) [23]. Code, data and results are available at https://github.com/anjaliash005/MLCS-IA. Everything is implemented in NumPy, with scikit-learn [24] used for the non-private "
                "models and metrics. All scaling uses fixed public bounds, so preprocessing consumes no privacy budget. "
                f"Results are means over seeds 0-{NS - 1}; paired Wilcoxon tests compare each configuration with the "
                "baseline."))
@@ -202,6 +203,7 @@ def main():
     doc.addPageTemplates([PageTemplate("first", first, onPage=foot), PageTemplate("later", later, onPage=foot)])
     story = header() + [NextPageTemplate("later"), FrameBreak()] + body()
     doc.build(story)
+    strip_dates(OUT)
     print("wrote", OUT)
 
 
